@@ -1,21 +1,24 @@
 package edu.isi.bmkeg.pagedList.events
 {
-	import edu.isi.bmkeg.pagedList.model.PagedListModel;
-	
 	import flash.events.Event;
 	
 	public class CountPagedListLengthEvent extends Event
 	{
 		public static const COUNT_PAGED_LIST_LENGTH:String = "CountPagedListLengthEvent";
 
-		public function CountPagedListLengthEvent(bubbles:Boolean=false, cancelable:Boolean=false)
+		public var listId:String;
+		
+		public function CountPagedListLengthEvent(listId:String=null, 
+												  bubbles:Boolean=false, 
+												  cancelable:Boolean=false)
 		{
+			this.listId = listId;
 			super(COUNT_PAGED_LIST_LENGTH, bubbles, cancelable);
 		}
 
 		override public function clone():Event
 		{
-			return new CountPagedListLengthEvent(bubbles, cancelable)
+			return new CountPagedListLengthEvent(listId, bubbles, cancelable)
 		}
 
 	}

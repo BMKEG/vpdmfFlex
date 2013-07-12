@@ -20,6 +20,8 @@ package edu.isi.bmkeg.pagedList.model
 	public class PagedListModel extends Actor
 	{
 		
+		public var id:String = null;
+		
 		public var pageSize:int = 200;
 		
 		public var tempOffset:int = -1;
@@ -50,14 +52,16 @@ package edu.isi.bmkeg.pagedList.model
 			if (v != _selectedIndex)
 			{
 				_selectedIndex = v;
-				dispatch(new PagedListSelectionChangedEvent(selectedIndex));						
+				dispatch(
+					new PagedListSelectionChangedEvent(selectedIndex, this.id)
+				);						
 			}
 
 		}
 		
-		public function initCitationsList():void
+		public function initPagedList():void
 		{
-			dispatch(new CountPagedListLengthEvent());
+			dispatch(new CountPagedListLengthEvent(this.id));
 		}
 		
 		public function get pagedListLength():int
@@ -78,13 +82,13 @@ package edu.isi.bmkeg.pagedList.model
 				_pagedList.loadItemsFunction = dispatchPagedListRetrievePageEvent;
 				this.storeObjectsAt(this.tempOffset, list.toArray(), false);
 				this.tempOffset = -1;
-				dispatch(new PagedListUpdatedEvent());
+				dispatch(new PagedListUpdatedEvent(this.id));
 				
 			} else {
 
 				_pagedList = new PagedList(v, pageSize);
 				_pagedList.loadItemsFunction = dispatchPagedListRetrievePageEvent;
-				dispatch(new PagedListUpdatedEvent());
+				dispatch(new PagedListUpdatedEvent(this.id));
 				
 			}
 			
@@ -104,13 +108,13 @@ package edu.isi.bmkeg.pagedList.model
 				_pagedList = new PagedList(objects.length, pageSize);
 				_pagedList.storeItemsAt(objects, 0); 
 				this.tempOffset = offset;
-				dispatch(new CountPagedListLengthEvent());
-				dispatch(new PagedListUpdatedEvent());
+				dispatch(new CountPagedListLengthEvent(this.id));
+				dispatch(new PagedListUpdatedEvent(this.id));
 				
 			} else {
 				
 				_pagedList.storeItemsAt(objects, offset); 
-				dispatch(new PagedListUpdatedEvent());
+				dispatch(new PagedListUpdatedEvent(this.id));
 				
 			}
 			
@@ -118,7 +122,7 @@ package edu.isi.bmkeg.pagedList.model
 
 		private function dispatchPagedListRetrievePageEvent(list:PagedList, index:int, count:int):void {
 			
-			dispatch(new PagedListRetrievePageEvent(index, count) );
+			dispatch(new PagedListRetrievePageEvent(index, count, this.id) );
 				
 		}
 		
@@ -132,7 +136,7 @@ package edu.isi.bmkeg.pagedList.model
 			this.tempOffset = -1;
 			this._pagedList = null;
 			this._selectedIndex = -1;
-			dispatch(new PagedListUpdatedEvent());
+			dispatch(new PagedListUpdatedEvent(this.id));
 		}
 		
 	}

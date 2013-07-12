@@ -46,8 +46,9 @@ package edu.isi.bmkeg.pagedList
 	 * 
 	 *  <p>This class is intended to be used as the "list" source for an ASyncListView.</p>
 	 */
-	public class PagedList  extends EventDispatcher implements IList
+	public class PagedList extends EventDispatcher implements IList
 	{
+							
 		/**
 		 *  @private
 		 */

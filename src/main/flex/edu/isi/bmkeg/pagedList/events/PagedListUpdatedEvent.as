@@ -8,14 +8,19 @@ package edu.isi.bmkeg.pagedList.events
 	{
 		public static const UPDATED:String = "InfiniteListUpdatedEvent";
 		
-		public function PagedListUpdatedEvent(bubbles:Boolean=false, cancelable:Boolean=false)
+		public var listId:String;
+		
+		public function PagedListUpdatedEvent(listId:String=null,
+											  bubbles:Boolean=false, 
+											  cancelable:Boolean=false)
 		{
 			super(UPDATED, bubbles, cancelable);
+			this.listId = listId;
 		}
 
 		override public function clone():Event
 		{
-			return new PagedListUpdatedEvent(bubbles, cancelable)
+			return new PagedListUpdatedEvent(listId, bubbles, cancelable)
 		}
 
 	}

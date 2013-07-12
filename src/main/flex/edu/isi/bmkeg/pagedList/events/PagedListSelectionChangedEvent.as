@@ -10,18 +10,22 @@ package edu.isi.bmkeg.pagedList.events
 		/**
 		 * selected Article or null if none is selected
 		 */
+		public var listId:String;
 		public var selectedIndex:int;
 		
-		public function PagedListSelectionChangedEvent(selectedIndex:int, 
-												 bubbles:Boolean=false, cancelable:Boolean=false)
+		public function PagedListSelectionChangedEvent(selectedIndex:int,
+													   listId:String=null,
+													   bubbles:Boolean=false, 
+													   cancelable:Boolean=false)
 		{
 			super(CHANGED, bubbles, cancelable);
 			this.selectedIndex = selectedIndex;
+			this.listId = listId;
 		}
 
 		override public function clone():Event
 		{
-			return new PagedListSelectionChangedEvent(selectedIndex, bubbles, cancelable)
+			return new PagedListSelectionChangedEvent(selectedIndex, listId, bubbles, cancelable)
 		}
 
 	}
