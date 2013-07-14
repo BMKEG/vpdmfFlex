@@ -14,7 +14,7 @@ package edu.isi.bmkeg.pagedList.events
 											  bubbles:Boolean=false, 
 											  cancelable:Boolean=false)
 		{
-			super(UPDATED, bubbles, cancelable);
+			super(UPDATED+listId, bubbles, cancelable);
 			this.listId = listId;
 		}
 

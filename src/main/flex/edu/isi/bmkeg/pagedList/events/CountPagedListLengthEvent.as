@@ -13,7 +13,7 @@ package edu.isi.bmkeg.pagedList.events
 												  cancelable:Boolean=false)
 		{
 			this.listId = listId;
-			super(COUNT_PAGED_LIST_LENGTH, bubbles, cancelable);
+			super(COUNT_PAGED_LIST_LENGTH + listId, bubbles, cancelable);
 		}
 
 		override public function clone():Event

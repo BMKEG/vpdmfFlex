@@ -18,7 +18,7 @@ package edu.isi.bmkeg.pagedList.events
 												   listId:String=null,
 												   bubbles:Boolean=false, 
 												   cancelable:Boolean=false) {
-			super(PAGEDLIST_RETRIEVE_PAGE, bubbles, cancelable);
+			super(PAGEDLIST_RETRIEVE_PAGE + listId, bubbles, cancelable);
 			this.listId = listId;
 			this.offset = offset;
 			this.count = count;
