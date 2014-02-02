@@ -89,7 +89,7 @@ package edu.isi.bmkeg.pagedList.model
 				_pagedList = new PagedList(v, pageSize);
 				_pagedList.loadItemsFunction = dispatchPagedListRetrievePageEvent;
 				dispatch(new PagedListUpdatedEvent(this.id));
-				
+				 
 			}
 			
 		}
@@ -102,7 +102,9 @@ package edu.isi.bmkeg.pagedList.model
 		
 		public function storeObjectsAt(offset:int, objects:Array, refresh:Boolean):void
 		{
-						
+				
+			// First pass through will trigger this section. 
+			// Need to get the counts correct. 
 			if( _pagedList == null || refresh) {
 				
 				_pagedList = new PagedList(objects.length, pageSize);
@@ -111,7 +113,9 @@ package edu.isi.bmkeg.pagedList.model
 				dispatch(new CountPagedListLengthEvent(this.id));
 				dispatch(new PagedListUpdatedEvent(this.id));
 				
-			} else {
+			} 
+			// Second pass through ends here. 
+			else {
 				
 				_pagedList.storeItemsAt(objects, offset); 
 				dispatch(new PagedListUpdatedEvent(this.id));

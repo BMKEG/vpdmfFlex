@@ -60,6 +60,12 @@
 			[Bindable]
 			public var fileName:String;
 			public var unloadedMessage:String = "-- No File Loaded --"; 
+
+			public var fileData:Object;
+
+			public var includeFolders:Boolean = false; 
+
+			public var uploadOnly:Boolean = false;
 			
 			[Bindable]
 			public var downloadFunction:Function = saveFile;
@@ -105,7 +111,7 @@
 
 			}
 			
-			private function selectHandler(event:Event):void
+			public function selectHandler(event:Event):void
 			{
 				file.removeEventListener(Event.SELECT, selectHandler);
 				
@@ -122,7 +128,7 @@
 				
 				file.removeEventListener(Event.COMPLETE, loadCompleteHandler);
 				
-				var upEvent:Event = new UploadCompleteEvent(file.data, true);
+				var upEvent:Event = new UploadCompleteEvent(file, true);
 				
 				this.dispatchEvent(upEvent);
 				
@@ -131,12 +137,14 @@
 			// ~~~~~~~~
 			// DOWNLOAD
 			// ~~~~~~~~
-			public function saveFile():void {				
-				var saveFile:FileReference = new FileReference();
-				saveFile.addEventListener(Event.OPEN, saveBeginHandler);
-				saveFile.addEventListener(Event.COMPLETE, saveCompleteHandler);
-				saveFile.addEventListener(IOErrorEvent.IO_ERROR, saveIOErrorHandler);
-				saveFile.save(this.file.data);
+			public function saveFile():void {
+				if( this.fileData != null ) {
+					var saveFile:FileReference = new FileReference();
+					saveFile.addEventListener(Event.OPEN, saveBeginHandler);
+					saveFile.addEventListener(Event.COMPLETE, saveCompleteHandler);
+					saveFile.addEventListener(IOErrorEvent.IO_ERROR, saveIOErrorHandler);
+					saveFile.save(this.fileData, this.fileName);
+				}
 			}
 			
 			
@@ -164,12 +172,22 @@
 			// ~~~~~~~~~~~~~~~~~~~~~~~~~
 			// STYLIZE THE FILE NAME BOX
 			// ~~~~~~~~~~~~~~~~~~~~~~~~~
+			public function loadFile(name:String, data:Object):void
+			{				
+				this.file = null;
+				this.fileName = name;
+				this.fileData = data;
+				this.fileNameBox.styleName = "active";
+				this.clearButton.enabled = true;
+			}						
+			
 			public function clearFile():void
 			{				
 				this.file = null;
 				this.fileName = unloadedMessage;
 				this.fileNameBox.styleName = "inactive";
 				this.clearButton.enabled = false;
+				this.dispatchEvent( new ClearUpdownloadEvent(true, false) );
 			}			
 			
 		]]>
@@ -179,7 +197,7 @@
 				 text="{fileName}"
 				 initialize="fileNameBox.styleName='inactive'"/>
 	
-	<s:Button id="downButton" label="{downLabel}" toolTip="{downTooltip}" width="{downWidth}" />
+	<s:Button id="downButton" label="{downLabel}" toolTip="{downTooltip}" width="{downWidth}" click="saveFile()"/>
 	<s:Button id="upButton" label="{upLabel}" toolTip="{upTooltip}" width="{upWidth}" click="startLoadingFile()"/>		
 	<s:Button id="clearButton" label="{clearLabel}" toolTip="{clearTooltip}" width="{clearWidth}" click="clearFile()"/>		
 	
