@@ -36,7 +36,8 @@ package org.libspark.utils
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
 	import flash.errors.EOFError;
-	
+	import flash.system.LoaderContext;
+
 	/**
 	 * Loads a SWF file as version 9 format forcibly even if version is under 9.
 	 * 
@@ -80,6 +81,33 @@ package org.libspark.utils
 		{
 			_stream.load(request);
 		}
+		
+		//
+		// Added by Gully to provide the loadBytes functionality.
+		//
+		public function loadBytes(inputBytes:ByteArray):void
+		{
+			if (isCompressed(inputBytes)) {
+				uncompress(inputBytes);
+			}
+			
+			var version:uint = uint(inputBytes[3]);
+			
+			if (version < 9) {
+				updateVersion(inputBytes, 9);
+			}
+			if (version > 7) {
+				flagSWF9Bit(inputBytes);
+			}
+			else {
+				insertFileAttributesTag(inputBytes);
+			}
+
+			var ldrCtx:LoaderContext = new LoaderContext();
+			ldrCtx.allowCodeImport = true; 
+
+			loader.loadBytes(inputBytes, ldrCtx);
+		}		
 		
 		private function completeHandler(event:Event):void
 		{
