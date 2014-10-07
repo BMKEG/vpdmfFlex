@@ -6,3 +6,4 @@ bin/*.swc
 /.actionScriptProperties
 /.flexLibProperties
 .DS_Store
+/bin
